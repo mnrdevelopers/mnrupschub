@@ -1,0 +1,585 @@
+/* Global Styles */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #2c3e50;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    padding-top: 0; /* For fixed navbar */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.hero-section h1 {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+/* Card Styles */
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+.card-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Icon Wrappers */
+.icon-wrapper {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--light-color);
+    margin-bottom: 20px;
+}
+
+/* Navigation */
+.navbar {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    padding: 15px 0;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 8px 15px !important;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Section Spacing */
+section {
+    padding: 80px 0;
+}
+
+/* Button Styles */
+.btn {
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-lg {
+    padding: 15px 40px;
+}
+
+.btn-primary {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Content Cards */
+.content-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.content-card:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* Category Tags */
+.category-tag {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.tag-prelims {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.tag-mains {
+    background: #e8f5e9;
+    color: #388e3c;
+}
+
+.tag-combined {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+/* Search Box */
+.search-box {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.search-box input {
+    padding: 15px 20px;
+    padding-left: 50px;
+    border-radius: 50px;
+    border: 2px solid #e0e0e0;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.search-box i {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    background: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.breadcrumb-item a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 60px 0;
+        min-height: auto;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    section {
+        padding: 50px 0;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+}
+
+/* Loading Spinner */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+}
+
+footer a {
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: white !important;
+}
+
+/* Additional styles for Mains and Combined pages */
+
+/* GS Paper Cards */
+.gs-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* Strategy icons */
+.strategy-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* Integrated cards */
+.integrated-badge {
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    color: white;
+    font-size: 0.7rem;
+    padding: 3px 10px;
+}
+
+/* Timeline styles */
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline:before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #dee2e6;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 2px solid white;
+    box-shadow: 0 0 0 3px #0d6efd;
+}
+
+/* Topic pills */
+.topic-pill {
+    display: inline-block;
+    padding: 5px 15px;
+    margin: 3px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.topic-pill:hover {
+    transform: translateY(-2px);
+}
+
+/* Connection visualization */
+.connection-visual {
+    position: relative;
+    padding: 20px;
+}
+
+.connection-node {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px #0d6efd;
+}
+
+/* Enhanced table styles for Mains PYQs */
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Model answer cards */
+.model-answer-card {
+    border-left: 4px solid #28a745;
+    transition: all 0.3s ease;
+}
+
+.model-answer-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+/* Integrated approach cards */
+.integrated-approach-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.integrated-approach-card:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    border-color: #adb5bd;
+}
+
+/* Badge variations */
+.badge-outline-primary {
+    background: transparent;
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+}
+
+.badge-outline-success {
+    background: transparent;
+    border: 1px solid #28a745;
+    color: #28a745;
+}
+
+.badge-outline-warning {
+    background: transparent;
+    border: 1px solid #ffc107;
+    color: #ffc107;
+}
+
+/* Content type indicators */
+.content-type-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.indicator-prelims {
+    background-color: #0d6efd;
+}
+
+.indicator-mains {
+    background-color: #28a745;
+}
+
+.indicator-combined {
+    background-color: #ffc107;
+}
+
+/* Enhanced search box for combined page */
+.search-box.combined {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.search-box.combined input {
+    background: white;
+    border: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .gs-icon, .strategy-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .topic-pill {
+        padding: 3px 10px;
+        font-size: 0.7rem;
+    }
+    
+    .timeline {
+        padding-left: 20px;
+    }
+    
+    .timeline:before {
+        left: 10px;
+    }
+    
+    .timeline-item:before {
+        left: -16px;
+    }
+}
+/* MCQ/PYQ App additions */
+.page-header {
+    margin-top: 76px;
+}
+
+.prelims-header {
+    background: linear-gradient(135deg, #0d6efd, #3f8cff);
+}
+
+.mains-header {
+    background: linear-gradient(135deg, #198754, #38a66f);
+}
+
+.combined-header {
+    background: linear-gradient(135deg, #6f42c1, #9a63df);
+}
+
+.filter-panel {
+    border: 0;
+}
+
+.section-title {
+    font-family: 'Merriweather', serif;
+    color: #1f2d3d;
+}
+
+.stat-box {
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+
+.question-card .card-body {
+    padding: 1rem;
+}
+
+.mcq-meta-grid {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.mcq-meta-pill {
+    border-radius: 10px;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid transparent;
+}
+
+.mcq-core-topic {
+    background: #fff4dd;
+    border-color: #ffe2a8;
+}
+
+.mcq-relevant-test {
+    background: #e9f7ef;
+    border-color: #b9e5c8;
+}
+
+.mcq-meta-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #3b4651;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.mcq-meta-value {
+    display: block;
+    font-size: 0.86rem;
+    color: #1f2d3d;
+    margin-top: 0.1rem;
+}
+
+.question-statements {
+    padding-left: 1.1rem;
+}
+
+.question-statements li {
+    margin-bottom: 0.25rem;
+}
+
+.answer-box {
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: #e7f1ff;
+    border: 1px solid #b8d5ff;
+}
+
+.hero-stat {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.hero-stat h3 {
+    color: #fff;
+    margin-bottom: 0;
+}

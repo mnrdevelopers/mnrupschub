@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MNR UPSC Hub</title>
+    <meta name="theme-color" content="#0d6efd">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MNR UPSC Hub">
+    <meta name="msapplication-TileColor" content="#0d6efd">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.svg">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin-dashboard.html">
+                <i class="fas fa-user-shield me-2"></i>Admin Dashboard
+            </a>
+            <button class="btn btn-danger" onclick="logoutAdmin()">
+                <i class="fas fa-sign-out-alt me-1"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-5">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#dashboard">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('posts')">
+                                <i class="fas fa-newspaper me-2"></i> Manage Posts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('addPost')">
+                                <i class="fas fa-plus-circle me-2"></i> Add New Post
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('mcqs')">
+                                <i class="fas fa-question-circle me-2"></i> Manage MCQs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('pyqs')">
+                                <i class="fas fa-history me-2"></i> Manage PYQs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('importSchedule')">
+                                <i class="fas fa-file-import me-2"></i> Import Schedule
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('users')">
+                                <i class="fas fa-users me-2"></i> Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html" target="_blank">
+                                <i class="fas fa-external-link-alt me-2"></i> View Site
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="section">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Dashboard Overview</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="refreshStats()">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card text-white bg-primary mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title">Total Posts</h6>
+                                            <h2 id="totalPosts" class="mb-0">0</h2>
+                                        </div>
+                                        <i class="fas fa-newspaper fa-3x opacity-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-success mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title">Prelims Posts</h6>
+                                            <h2 id="prelimsPosts" class="mb-0">0</h2>
+                                        </div>
+                                        <i class="fas fa-file-alt fa-3x opacity-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-warning mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title">Mains Posts</h6>
+                                            <h2 id="mainsPosts" class="mb-0">0</h2>
+                                        </div>
+                                        <i class="fas fa-edit fa-3x opacity-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-info mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title">MCQs</h6>
+                                            <h2 id="totalMCQs" class="mb-0">0</h2>
+                                        </div>
+                                        <i class="fas fa-question-circle fa-3x opacity-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Posts -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Recent Posts</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="recentPostsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Type</th>
+                                                    <th>Subject</th>
+                                                    <th>Date</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recentPostsBody">
+                                                <!-- Will be populated by JS -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manage Posts Section -->
+                <div id="posts" class="section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Manage Posts</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+                                <select class="form-select form-select-sm" id="filterPosts">
+                                    <option value="all">All Posts</option>
+                                    <option value="prelims">Prelims</option>
+                                    <option value="mains">Mains</option>
+                                    <option value="combined">Combined</option>
+                                </select>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" placeholder="Search posts..." id="searchPosts">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="postsTable">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Exam Type</th>
+                                    <th>Subject</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="postsTableBody">
+                                <!-- Will be populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Add New Post Section -->
+                <div id="addPost" class="section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Add New Post</h1>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="addPostForm">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="postTitle" class="form-label">Post Title *</label>
+                                        <input type="text" class="form-control" id="postTitle" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="postSlug" class="form-label">URL Slug</label>
+                                        <input type="text" class="form-control" id="postSlug" placeholder="auto-generated">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="examType" class="form-label">Exam Type *</label>
+                                        <select class="form-select" id="examType" required>
+                                            <option value="">Select Type</option>
+                                            <option value="prelims">Prelims</option>
+                                            <option value="mains">Mains</option>
+                                            <option value="combined">Prelims + Mains</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="subject" class="form-label">Subject *</label>
+                                        <select class="form-select" id="subject" required>
+                                            <option value="">Select Subject</option>
+                                            <option value="polity">Polity</option>
+                                            <option value="history">History</option>
+                                            <option value="geography">Geography</option>
+                                            <option value="economy">Economy</option>
+                                            <option value="environment">Environment</option>
+                                            <option value="science">Science & Tech</option>
+                                            <option value="current-affairs">Current Affairs</option>
+                                            <option value="gs1">GS Paper 1</option>
+                                            <option value="gs2">GS Paper 2</option>
+                                            <option value="gs3">GS Paper 3</option>
+                                            <option value="gs4">GS Paper 4</option>
+                                            <option value="essay">Essay</option>
+                                            <option value="ethics">Ethics</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="category" class="form-label">Category</label>
+                                        <input type="text" class="form-control" id="category" placeholder="e.g., Constitutional Framework, Ancient History">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="postContent" class="form-label">Content *</label>
+                                    <div id="editorToolbar" class="bg-light p-2 mb-2 border rounded">
+                                        <button type="button" class="btn btn-sm btn-light" onclick="formatText('bold')" title="Bold">
+                                            <i class="fas fa-bold"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-light" onclick="formatText('italic')" title="Italic">
+                                            <i class="fas fa-italic"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-light" onclick="formatText('underline')" title="Underline">
+                                            <i class="fas fa-underline"></i>
+                                        </button>
+                                        <div class="vr mx-2"></div>
+                                        <button type="button" class="btn btn-sm btn-light" onclick="insertList('ul')" title="Bullet List">
+                                            <i class="fas fa-list-ul"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-light" onclick="insertList('ol')" title="Numbered List">
+                                            <i class="fas fa-list-ol"></i>
+                                        </button>
+                                        <div class="vr mx-2"></div>
+                                        <button type="button" class="btn btn-sm btn-light" onclick="insertHeading()" title="Heading">
+                                            <i class="fas fa-heading"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-light" onclick="insertLink()" title="Insert Link">
+                                            <i class="fas fa-link"></i>
+                                        </button>
+                                    </div>
+                                    <textarea class="form-control" id="postContent" rows="15" required></textarea>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="keywords" class="form-label">Keywords (comma separated)</label>
+                                        <input type="text" class="form-control" id="keywords">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select class="form-select" id="status">
+                                            <option value="published">Published</option>
+                                            <option value="draft">Draft</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="fileUpload" class="form-label">Attach PDF (optional)</label>
+                                    <input type="file" class="form-control" id="fileUpload" accept=".pdf">
+                                    <small class="text-muted">Maximum file size: 10MB</small>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear</button>
+                                    <button type="submit" class="btn btn-primary" id="submitPostBtn">
+                                        <span id="submitText">Publish Post</span>
+                                        <span id="submitSpinner" class="spinner-border spinner-border-sm d-none"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manage MCQs Section -->
+                <div id="mcqs" class="section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Manage MCQs</h1>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-sm btn-outline-dark" id="backfillQuestionsBtn">
+                                <i class="fas fa-wrench me-1"></i> Backfill MCQ/PYQ Fields
+                            </button>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addMCQModal">
+                                <i class="fas fa-plus"></i> Add MCQ
+                            </button>
+                        </div>
+                    </div>
+                    <div id="backfillQuestionsStatus" class="mb-3"></div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">Bulk Import MCQs</h5>
+                            <p class="text-muted small mb-2">Paste a JSON array. Each item supports: exam, year, subject, test, question, optionA/optionB/optionC/optionD (or options[]), correctOption (or answerIndex), explanation.</p>
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-4">
+                                    <label class="form-label small mb-1">MCQ PDF (optional)</label>
+                                    <input type="file" id="mcqPdfFileInput" class="form-control form-control-sm" accept=".pdf,application/pdf">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small mb-1">MCQ JSON File (optional)</label>
+                                    <input type="file" id="mcqJsonFileInput" class="form-control form-control-sm" accept=".json,application/json">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Exam</label>
+                                    <select id="mcqPdfDefaultExam" class="form-select form-select-sm">
+                                        <option value="prelims">prelims</option>
+                                        <option value="mains">mains</option>
+                                        <option value="combined" selected>combined</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Year</label>
+                                    <input type="number" id="mcqPdfDefaultYear" class="form-control form-control-sm" min="1990" max="2100" placeholder="2026">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Subject</label>
+                                    <input type="text" id="mcqPdfDefaultSubject" class="form-control form-control-sm" placeholder="Polity">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Test</label>
+                                    <input type="text" id="mcqPdfDefaultTest" class="form-control form-control-sm" placeholder="Test 1">
+                                </div>
+                            </div>
+                            <textarea id="mcqBulkJsonInput" class="form-control" rows="8" placeholder='[{"exam":"prelims","year":2024,"subject":"Polity","test":"Test 1","question":"...","optionA":"...","optionB":"...","optionC":"...","optionD":"...","correctOption":"Option B","explanation":"..."}]'></textarea>
+                            <div class="mt-3 d-flex flex-wrap gap-2">
+                                <button class="btn btn-outline-primary" id="loadMCQJsonFileBtn"><i class="fas fa-file-code me-1"></i>Load JSON File</button>
+                                <button class="btn btn-outline-primary" id="extractMCQPdfBtn"><i class="fas fa-file-pdf me-1"></i>Extract PDF to JSON</button>
+                                <button class="btn btn-primary" id="importMCQBulkBtn"><i class="fas fa-file-import me-1"></i>Import MCQs</button>
+                                <button class="btn btn-outline-secondary" id="clearMCQBulkBtn"><i class="fas fa-eraser me-1"></i>Clear</button>
+                            </div>
+                            <div id="mcqBulkImportStatus" class="mt-3"></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                <button class="btn btn-sm btn-outline-danger" id="deleteSelectedMCQsBtn">
+                                    <i class="fas fa-trash me-1"></i>Delete Selected
+                                </button>
+                                <select class="form-select form-select-sm" id="mcqGroupBy" style="width: 190px;">
+                                    <option value="none">No Grouping</option>
+                                    <option value="year">Group by Year</option>
+                                    <option value="subject">Group by Subject</option>
+                                    <option value="category">Group by Category</option>
+                                    <option value="test">Group by Relevant Test</option>
+                                    <option value="exam">Group by Exam</option>
+                                </select>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="mcqPageSize" class="small text-muted mb-0">Rows</label>
+                                <select class="form-select form-select-sm" id="mcqPageSize" style="width: 88px;">
+                                    <option value="10">10</option>
+                                    <option value="20" selected>20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover" id="mcqsTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 42px;">
+                                        <input type="checkbox" id="mcqSelectAll" title="Select all on current page">
+                                    </th>
+                                    <th>Exam</th>
+                                    <th>Year</th>
+                                    <th>Subject</th>
+                                    <th>Category</th>
+                                    <th>Test</th>
+                                    <th>Question</th>
+                                    <th>Correct Option</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mcqsTableBody"></tbody>
+                        </table>
+                        <div class="d-flex justify-content-end align-items-center gap-2 mt-2">
+                            <button class="btn btn-sm btn-outline-secondary" id="mcqPrevPageBtn">
+                                <i class="fas fa-angle-left me-1"></i>Prev
+                            </button>
+                            <span id="mcqPageInfo" class="small text-muted">Page 1 / 1</span>
+                            <button class="btn btn-sm btn-outline-secondary" id="mcqNextPageBtn">
+                                Next<i class="fas fa-angle-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manage PYQs Section -->
+                <div id="pyqs" class="section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Manage PYQs</h1>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addPYQModal">
+                            <i class="fas fa-plus"></i> Add PYQ
+                        </button>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">Bulk Import PYQs</h5>
+                            <p class="text-muted small mb-2">Paste a JSON array. Each item supports: exam, year, subject, test, question, answer.</p>
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-4">
+                                    <label class="form-label small mb-1">PYQ PDF (optional)</label>
+                                    <input type="file" id="pyqPdfFileInput" class="form-control form-control-sm" accept=".pdf,application/pdf">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small mb-1">PYQ JSON File (optional)</label>
+                                    <input type="file" id="pyqJsonFileInput" class="form-control form-control-sm" accept=".json,application/json">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Exam</label>
+                                    <select id="pyqPdfDefaultExam" class="form-select form-select-sm">
+                                        <option value="prelims">prelims</option>
+                                        <option value="mains">mains</option>
+                                        <option value="combined" selected>combined</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Year</label>
+                                    <input type="number" id="pyqPdfDefaultYear" class="form-control form-control-sm" min="1990" max="2100" placeholder="2026">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Subject</label>
+                                    <input type="text" id="pyqPdfDefaultSubject" class="form-control form-control-sm" placeholder="GS2">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Default Test</label>
+                                    <input type="text" id="pyqPdfDefaultTest" class="form-control form-control-sm" placeholder="CSE 2023">
+                                </div>
+                            </div>
+                            <textarea id="pyqBulkJsonInput" class="form-control" rows="8" placeholder='[{"exam":"mains","year":2023,"subject":"GS2","test":"CSE 2023","question":"...","answer":"..."}]'></textarea>
+                            <div class="mt-3 d-flex flex-wrap gap-2">
+                                <button class="btn btn-outline-primary" id="loadPYQJsonFileBtn"><i class="fas fa-file-code me-1"></i>Load JSON File</button>
+                                <button class="btn btn-outline-primary" id="extractPYQPdfBtn"><i class="fas fa-file-pdf me-1"></i>Extract PDF to JSON</button>
+                                <button class="btn btn-primary" id="importPYQBulkBtn"><i class="fas fa-file-import me-1"></i>Import PYQs</button>
+                                <button class="btn btn-outline-secondary" id="clearPYQBulkBtn"><i class="fas fa-eraser me-1"></i>Clear</button>
+                            </div>
+                            <div id="pyqBulkImportStatus" class="mt-3"></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="pyqsTable">
+                            <thead>
+                                <tr>
+                                    <th>Exam</th>
+                                    <th>Year</th>
+                                    <th>Subject</th>
+                                    <th>Test</th>
+                                    <th>Question</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pyqsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Import Schedule Section -->
+                <div id="importSchedule" class="section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Import Schedule JSON</h1>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <strong>Expected JSON:</strong> Root fields <code>program</code>, <code>type</code>, <code>organization</code>, <code>subject</code>, and non-empty <code>schedule[]</code>.
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <label for="scheduleJsonInput" class="form-label">Paste schedule JSON</label>
+                            <textarea id="scheduleJsonInput" class="form-control json-input" rows="14" placeholder='{"program":"...","schedule":[...]}'></textarea>
+                            <div class="mt-3 d-flex flex-wrap gap-2">
+                                <button class="btn btn-outline-primary" id="validateScheduleBtn">
+                                    <i class="fas fa-check-circle me-1"></i>Validate & Preview
+                                </button>
+                                <button class="btn btn-primary" id="importScheduleBtn" disabled>
+                                    <i class="fas fa-database me-1"></i>Import Schedule
+                                </button>
+                                <button class="btn btn-secondary" id="clearScheduleBtn">
+                                    <i class="fas fa-eraser me-1"></i>Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="scheduleValidationCard" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="mb-0">Validation</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="scheduleValidationErrors"></div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="schedulePreviewCard" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="mb-0">Preview</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="scheduleProgramHeader" class="mb-3"></div>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Day</th>
+                                            <th>Class</th>
+                                            <th>Targets</th>
+                                            <th>Test</th>
+                                            <th>Syllabus Keys</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="schedulePreviewBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="scheduleImportStatusCard" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="mb-0">Import Status</h5>
+                        </div>
+                        <div class="card-body" id="scheduleImportStatus"></div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Users</h1>
+                    </div>
+                    <p class="text-muted">User management features coming soon.</p>
+                </div>
+
+                <!-- Add MCQ Modal -->
+                <div class="modal fade" id="addMCQModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add New MCQ</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addMCQForm">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Exam</label>
+                                            <select class="form-select" id="mcqExam" required>
+                                                <option value="prelims">Prelims</option>
+                                                <option value="mains">Mains</option>
+                                                <option value="combined">Combined</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Year</label>
+                                            <input type="number" class="form-control" id="mcqYear" min="1990" max="2100" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Test</label>
+                                            <input type="text" class="form-control" id="mcqTest" placeholder="e.g. Test 1 / FLT 3">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Subject</label>
+                                        <input type="text" class="form-control" id="mcqSubject" placeholder="e.g. Polity, GS2" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Question</label>
+                                        <textarea class="form-control" id="mcqQuestion" rows="3" required></textarea>
+                                    </div>
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-6"><input type="text" class="form-control" id="mcqOptionA" placeholder="Option A" required></div>
+                                        <div class="col-md-6"><input type="text" class="form-control" id="mcqOptionB" placeholder="Option B" required></div>
+                                        <div class="col-md-6"><input type="text" class="form-control" id="mcqOptionC" placeholder="Option C" required></div>
+                                        <div class="col-md-6"><input type="text" class="form-control" id="mcqOptionD" placeholder="Option D" required></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Correct Option</label>
+                                        <select class="form-select" id="mcqCorrect" required>
+                                            <option value="Option A">Option A</option>
+                                            <option value="Option B">Option B</option>
+                                            <option value="Option C">Option C</option>
+                                            <option value="Option D">Option D</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Explanation</label>
+                                        <textarea class="form-control" id="mcqExplanation" rows="2"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save MCQ</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit MCQ Modal -->
+                <div class="modal fade" id="editMCQModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit MCQ</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editMCQForm">
+                                    <input type="hidden" id="editMcqId">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Exam</label>
+                                            <select class="form-select" id="editMcqExam" required>
+                                                <option value="prelims">Prelims</option>
+                                                <option value="mains">Mains</option>
+                                                <option value="combined">Combined</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Year</label>
+                                            <input type="number" class="form-control" id="editMcqYear" min="1990" max="2100" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Subject</label>
+                                            <input type="text" class="form-control" id="editMcqSubject" required>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Test</label>
+                                            <input type="text" class="form-control" id="editMcqTest" placeholder="e.g. Test 1">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Relevant Schedule Test</label>
+                                            <input type="text" class="form-control" id="editMcqRelevantTest" placeholder="e.g. Test 1: Polity">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Core Topic</label>
+                                        <input type="text" class="form-control" id="editMcqCoreTopic" placeholder="e.g. Fundamental Rights">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Question</label>
+                                        <textarea class="form-control" id="editMcqQuestion" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Statements (one per line, optional)</label>
+                                        <textarea class="form-control" id="editMcqStatements" rows="4" placeholder="Statement 1&#10;Statement 2"></textarea>
+                                    </div>
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-6"><input type="text" class="form-control" id="editMcqOptionA" placeholder="Option A" required></div>
+                                        <div class="col-md-6"><input type="text" class="form-control" id="editMcqOptionB" placeholder="Option B" required></div>
+                                        <div class="col-md-6"><input type="text" class="form-control" id="editMcqOptionC" placeholder="Option C" required></div>
+                                        <div class="col-md-6"><input type="text" class="form-control" id="editMcqOptionD" placeholder="Option D" required></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Correct Option</label>
+                                        <select class="form-select" id="editMcqCorrect" required>
+                                            <option value="Option A">Option A</option>
+                                            <option value="Option B">Option B</option>
+                                            <option value="Option C">Option C</option>
+                                            <option value="Option D">Option D</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Explanation</label>
+                                        <textarea class="form-control" id="editMcqExplanation" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update MCQ</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add PYQ Modal -->
+                <div class="modal fade" id="addPYQModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add New PYQ</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addPYQForm">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Exam</label>
+                                            <select class="form-select" id="pyqExam" required>
+                                                <option value="prelims">Prelims</option>
+                                                <option value="mains">Mains</option>
+                                                <option value="combined">Combined</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Year</label>
+                                            <input type="number" class="form-control" id="pyqYear" min="1990" max="2100" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Test</label>
+                                            <input type="text" class="form-control" id="pyqTest" placeholder="e.g. CSE 2023 GS2">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3"><label class="form-label">Subject</label><input type="text" class="form-control" id="pyqSubject" required></div>
+                                    <div class="mb-3"><label class="form-label">Question</label><textarea class="form-control" id="pyqQuestion" rows="3" required></textarea></div>
+                                    <div class="mb-3"><label class="form-label">Answer/Key</label><textarea class="form-control" id="pyqAnswer" rows="2"></textarea></div>
+                                    <button type="submit" class="btn btn-primary">Save PYQ</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/pwa.js"></script>
+    
+    <script>
+        // Protect admin page
+        protectAdminPage();
+        
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Update sidebar active state
+            document.querySelectorAll('#sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeLink = document.querySelector(`#sidebar .nav-link[onclick="showSection('${sectionId}')"]`);
+            if (activeLink) activeLink.classList.add('active');
+        }
+        
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#postsTable').DataTable();
+            loadDashboardStats();
+            loadRecentPosts();
+            loadMCQs();
+            loadPYQs();
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Users Collection
+    // Allow users to read their own profile (required for login check)
+    // Allow admins to read/write all user documents
+    match /users/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
+    }
+    
+    // Content Collections (Posts, MCQs, PYQs, Model Answers)
+    // Public can read if status is 'published'
+    // Admins can read/write everything (including drafts)
+    match /{collection}/{document} {
+      allow read: if (collection in ['posts', 'mcqs', 'pyqs', 'model_answers']) && 
+                     (resource.data.status == 'published' || isAdmin());
+      allow write: if (collection in ['posts', 'mcqs', 'pyqs', 'model_answers']) && isAdmin();
+    }
+
+    // Program schedules (admin only)
+    match /program_schedules/{scheduleId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Day-wise schedule entries under each program schedule (admin only)
+    match /program_schedules/{scheduleId}/days/{dayId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // Default deny for any other collections not explicitly listed
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
